@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+ 
+<div class="input_auth" style="width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 25px 0px;
+    box-sizing: border-box;">
+    <h1 style="color: black;">Войти</h1></div>
+    
+     <div class='col-4' style="width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 24px;
+    box-sizing: border-box;">
+        <form id="add_form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_p}}<br>
+            <button form="add_form" type="submit" class="btn btn-primary" style="width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 24px;
+    box-sizing: border-box;">Авторизоваться</button>
+    <br>
+    <input class="btn btn-primary" type="button" onclick="location.href={{url_register}};" value="Регистрация" style="width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 24px;
+    box-sizing: border-box;"/>
+            </form>
+            
+          
+   </div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+        {% for video in video_list %}
+        
+    <br>
+    <p style="text-align: center;"> <a href="{% url 'profile' video.author.username %}">{{video.author}}</a></p>
+	<form action="{% url 'videomain' video.id %}" method="get">
+		<input type="hidden" name ="video.id" value="{{video.id}}">
+		<button type="submit" class="">
+		</form>
+            </div>
+				<div class="container">
+          <video width="100%" height="auto" style="position: relative";>
+          poster = "{{ video.image.url }}"
+              id="my-video"
+              class="video-js"
+              controls
+              preload="none"
+              
+              controls style="width: 100%;height: 50%;"
+              data-setup="{}"
+          
+            <source src="{% url 'stream' video.id %}" type="video/mp4"/>
+            <source src="{% url 'stream' video.id %}" type="video/webm"/>
+          </video>
+		  </div>
+          
+        {% endfor %}
+     </div>
+{% endblock content %}

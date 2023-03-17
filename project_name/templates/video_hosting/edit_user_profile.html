@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% if request.user.is_authenticated and request.user.username == user.username %}
+        <div class="header-bar">
+            <a href="{% url 'profile' user.username %}">Назад</a>
+        </div>
+    <div class="card-body">
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_p}}
+           <input class="btn btn-primary" type="submit" value="Обновить"></input>
+        </form>
+    </div>
+{% else %}
+   <a href="{% url 'login' %}">Login</a>
+{% endif %}
+{% endblock content %}

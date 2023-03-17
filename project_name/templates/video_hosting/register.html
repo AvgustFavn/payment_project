@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="input_auth" style="width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 25px 0px;
+    box-sizing: border-box;">
+    <h1 style="color: black;">Регистрация</h1></div>
+    <div class="input_auth" style="width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 25px 0px;
+    box-sizing: border-box;">
+   
+        <form id="add_form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form}}
+            <br>
+            <button form="add_form" type="submit" class="btn btn-primary" style="width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 4px 0px;
+    box-sizing: border-box;">Зарегистрироваться</button>
+            </form>
+    </div>
+{% endblock %}
+
+
+
