@@ -43,8 +43,14 @@
                   </button>
 				   
          </form>
-		 
-	
+		 <form method="get" action="{% url 'stars' %}">
+		 <button style="background: transparent; border: none; box-shadow: none;" type="submit">
+                      <img id='star' class='rounded-circle' src="../../media/star1.png" height=30 width=30>
+                       
+                     <span>отправить звезды</span>
+                  </button>
+		
+	</form>
 		
 	
 		 <p><strong><a href="{% url 'profile' video.author.username %}">{{video.author}}</a></strong> </p></div>

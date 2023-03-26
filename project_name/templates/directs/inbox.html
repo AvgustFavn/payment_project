@@ -71,27 +71,66 @@
 						</div>
 					</div>
 					{% for message in messages %}
+					{% if message.user == request.user %}
+					{% if user.avatar %}
 					
-					{% if profile.avatar %}
-					<p style="text-align: center;"><img class='rounded-circle' src="../../media/image/user.png" height=40 width=40></p>
+					<a href="{% url 'directs' message.user.username %}" class="list-group-item list-group-item-action border-0 {% if active_direct == message.user.username %}active{% endif %}">
+						<div class="badge bg-success float-right"></div>
+						<div class="d-flex align-items-start pb-2">
+							
+							
+							<p style="text-align: center;"><img class='rounded-circle' src="{{ message.user.avatar.url }}" height=40 width=40></p>
+							
+							<div class="flex-grow-1 ml-6">
+								<div class="small"><span class="fas fa-circle chat-online"></span> @{{message.user.username}}</div>
+							</div>
+						</div>	</a>
 					
 					
 					{% else %}
 					<a href="{% url 'directs' message.user.username %}" class="list-group-item list-group-item-action border-0 {% if active_direct == message.user.username %}active{% endif %}">
 						<div class="badge bg-success float-right"></div>
 						<div class="d-flex align-items-start pb-2">
-							{% if user.avatar %}
 							
-							<img src="{{ user.avatar.url }}" class="rounded-circle mr-1" alt="img" width="40" height="40">
+							<img src="../../media/image/user.png" class="rounded-circle mr-1" alt="img" width="40" height="40">
 							
 							<div class="flex-grow-1 ml-6">
 								<div class="small"><span class="fas fa-circle chat-online"></span> @{{message.user.username}}</div>
 							</div>
 						</div>	</a>
-							{% else %}
-							<p style="text-align: center;"><img class='rounded-circle' src="../../media/image/user.png" height=40 width=40></p>
+							
+					
 					
 					{% endif %}
+					{% else %}
+					
+					{% if message.user.avatar %}
+					
+					<a href="{% url 'directs' message.user.username %}" class="list-group-item list-group-item-action border-0 {% if active_direct == message.user.username %}active{% endif %}">
+						<div class="badge bg-success float-right"></div>
+						<div class="d-flex align-items-start pb-2">
+							
+							
+							<p style="text-align: center;"><img class='rounded-circle' src="{{ message.user.avatar.url }}" height=40 width=40></p>
+							
+							<div class="flex-grow-1 ml-6">
+								<div class="small"><span class="fas fa-circle chat-online"></span> @{{message.user.username}}</div>
+							</div>
+						</div>	</a>
+					
+					
+					{% else %}
+					<a href="{% url 'directs' message.user.username %}" class="list-group-item list-group-item-action border-0 {% if active_direct == message.user.username %}active{% endif %}">
+						<div class="badge bg-success float-right"></div>
+						<div class="d-flex align-items-start pb-2">
+							
+							<img src="../../media/image/user.png" class="rounded-circle mr-1" alt="img" width="40" height="40">
+							
+							<div class="flex-grow-1 ml-6">
+								<div class="small"><span class="fas fa-circle chat-online"></span> @{{message.user.username}}</div>
+							</div>
+						</div>	</a>
+						{% endif %}
 					{% endif %}
 					{% endfor %}
 
@@ -120,10 +159,10 @@
 
 									{% for direct in directs %}
 										{% if direct.sender == request.user %}
-										{% if profile.avatar %}
+										{% if user.avatar %}
 											<div class="chat-message-right pb-2">
 												<div>
-													<a href=""><img src="{{ profile.avatar.url }}" class="rounded-circle mr-1" alt="img" width="40" height="40"></a>
+													<a href=""><img src="{{ user.avatar.url }}" class="rounded-circle mr-1" alt="img" width="40" height="40"></a>
 													<div class="text-muted small text-nowrap mt-2" style="font-size:10px; color: rgba(180, 180, 180, 0);"><p style="font-size:10px; color: black;">{{direct.date|date:"d M, Y"}}</p></div>
 
 												</div>
@@ -133,6 +172,7 @@
 												</div>
 											</div>
 											{% else %}
+											
 											<div class="chat-message-right pb-2">
 												<div>
 													<a href=""><img src="../../media/image/user.png" class="rounded-circle mr-1" alt="img" width="40" height="40"></a>
@@ -146,10 +186,10 @@
 											</div>
 											{% endif %}
 										{% else %}
-										{% if profile.avatar %}
-											<div class="chat-message-right pb-2">
+										{% if direct.sender.avatar %}
+											<div class="chat-message-left pb-2">
 												<div>
-													<a href=""><img src="{{ profile.avatar.url }}" class="rounded-circle mr-1" alt="img" width="40" height="40"></a>
+													<a href=""><img src="{{ direct.sender.avatar.url }}" class="rounded-circle mr-1" alt="img" width="40" height="40"></a>
 													<div class="text-muted small text-nowrap mt-2" style="font-size:10px; color: rgba(180, 180, 180, 0);"><p style="font-size:10px; color: black;">{{direct.date|date:"d M, Y"}}</p></div>
 
 												</div>
@@ -159,7 +199,7 @@
 												</div>
 											</div>
 											{% else %}
-											<div class="chat-message-right pb-2">
+											<div class="chat-message-left pb-2">
 												<div>
 													<a href=""><img src="../../media/image/user.png" class="rounded-circle mr-1" alt="img" width="40" height="40"></a>
 													<div class="text-muted small text-nowrap mt-2" style="font-size:10px; color: rgba(180, 180, 180, 0);"><p style="font-size:10px; color: black;">{{direct.date|date:"d M, Y"}}</p></div>
@@ -177,6 +217,7 @@
 
 						</div>
 					</div>
+
 						
 						<div class="flex-grow-0 py-3 px-4 border-top">
 							<form method="POST" action="{% url 'send-message' %}">

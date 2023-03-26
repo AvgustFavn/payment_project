@@ -6,9 +6,9 @@ from project_name import settings
 
 
 class Message(models.Model):
-    user = models.ForeignKey(User,  on_delete=models.CASCADE, related_name="user")
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="from_user")
-    reciepient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="to_user")
+    user = models.ForeignKey(User,  on_delete=models.CASCADE, related_name="user") # кому отображэается
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="from_user") # кто отправил
+    reciepient = models.ForeignKey(User, on_delete=models.CASCADE, related_name="to_user") # получатель
     body = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)

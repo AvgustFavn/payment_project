@@ -3,7 +3,7 @@ from typing import Set
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
-from .models import Video, Comments, User, Profile, FollowersCount, IpModel
+from .models import Video, Comments, User, Profile, FollowersCount, IpModel, WalletUser, Check
 from typing import Set
 from django.contrib import admin
 from django.contrib.auth.models import User
@@ -15,6 +15,8 @@ admin.site.register(Profile)
 admin.site.register(FollowersCount)
 admin.site.register(IpModel)
 admin.site.register(User)
+admin.site.register(WalletUser)
+admin.site.register(Check)
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):

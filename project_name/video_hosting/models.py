@@ -23,7 +23,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     facebook = models.CharField(max_length=50, null=True, blank=True)
     twitter = models.CharField(max_length=50, null=True, blank=True)
     instagram = models.CharField(max_length=50, null=True, blank=True)
-    is_active = models.BooleanField(_('active'), default=False)
+    is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('staff'), default=False)
 
     is_verified = models.BooleanField(_('verified'), default=False)
@@ -60,6 +60,12 @@ class Video(models.Model):
     file = models.FileField(verbose_name = 'Видео',
         upload_to='video/',
         validators=[FileExtensionValidator(allowed_extensions=['mp4'])]
+    )
+    audio = models.FileField(verbose_name='Музыка',
+        upload_to='audio/',
+        validators=[FileExtensionValidator(allowed_extensions=['mp3'])],
+        null=True,
+        default=None
     )
     create_at = models.DateTimeField(auto_now_add=True)
     
@@ -112,12 +118,19 @@ class FollowersCount(models.Model):
 class WalletUser(models.Model):
     user_id = models.IntegerField(null=False)
     condition = models.FloatField(default=0.0, null=False)
+    likes = models.ManyToManyField(Video, blank=True, related_name='liky')
 
 class Check(models.Model):
     check_info = models.CharField(max_length=200, null=False)
     status = models.BooleanField(default=False) # Если фолс то юзер еще не вводил данные на сайте
     money = models.IntegerField(null=False)
 
+class Audio(models.Model):
+    audio_path = models.CharField(max_length=500, null=False)
 
+class PhoneCodes(models.Model):
+    username = models.CharField(max_length=255, null=False)
+    phone = models.CharField(max_length=30, null=False)
+    code = models.IntegerField(null=False)
+    status = models.BooleanField(default=False)
 
-    

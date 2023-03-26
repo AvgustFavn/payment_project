@@ -36,6 +36,11 @@
             {% url 'create' as url_create %}
         <a class="nav-link {% if url_create == request.path %}active{% endif %}" href="{{url_create}}">Создание/ред/удаление</a>
         </li>
+		
+		<li class="nav-item">  
+            {% url 'directs' as url_directs %}
+        <a class="nav-link {% if url_directs == request.path %}active{% endif %}" href="{% url 'directs' user.username %}">Чат</a>
+        </li>
         
 		
 		

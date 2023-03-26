@@ -36,30 +36,22 @@
         {% for user in users %}
             <div class="side-menu__user-profile" style="text-align: start; border: solid rgba(192, 192, 192, 0.514) 1px; padding: 10px; border-radius: 25px;">
                 <a href="{% url 'profile' user.username %}" class="side-menu__user-avatar">
-                    {% if profile.avatar %}
-                    <img src="{% static 'media/images/profile/default-user.png' %}" alt="User Picture">
-                    {% else %}
-					<p style="text-align: left;"><img class='rounded-circle' src="{{user.avatar.url}}" height=100 width=100></p><br>
-
-                    {% endif %}
-                </a>
-                <div class="side-menu__user-idnfo">
-                    {% if user.profile.first_name %}
-                    <a href="{% url 'profile' user.username %}" style="font-size: 15px; color: black; text-align: center;">{{user.profile.first_name|title }} {{user.profile.last_name|title }}</a>
-                    {% else%}
-                    <a href="{% url 'profile' user.username %}">Пользователь</a>
-
-                    {% endif %}
-                    <br>
-                    <span style="font-size: 14px;">@{{user.username}}</span>
-                    <br>
+				
+                    
+					{% if user.avatar %}
+					<p style="text-align: left;"><img class='rounded-circle mr-1' src="{{user.avatar.url}}" width="50" height="50"></p>
+					<strong>{{user.username}}</strong><br>
                     <a href="{% url 'profile' user.username %}" style="color: blue;" class="side-menu__user-button">Смотреть профиль</a>
-
-                </div>
-            </div>
+					
+					
+					{% else %}
+					<p style="text-align: left;"><img src="../../media/image/user.png" class="rounded-circle mr-1" alt="img" width="50" height="50"></p>
+					<strong>{{user.username}}</strong><br>
+                    <a href="{% url 'profile' user.username %}" style="color: blue;" class="side-menu__user-button">Смотреть профиль</a>
+                 {% endif %}
             <!-- <hr> -->
         {% endfor %}
-        
+       
           
         </form>
         

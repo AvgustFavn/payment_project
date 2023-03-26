@@ -11,7 +11,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.detail import DetailView
-from .backends import create_wallet, get_wallet, send_money, create_check, end_check
+from .backends import *
 from .models import *
 from .services import open_file
 from .forms import ArticleForm, AuthUserForm, RegisterUserForm, CommentForm, EditeProfileForm
@@ -102,25 +102,47 @@ def Profile(request, username):
 
 def wallet_user(request, username):
     user = get_object_or_404(User, username=username)
-    if request.user.username == user.username:
-        if request.method == 'GET':
-            counts = get_wallet(username)
-            return render(request, 'video_hosting/wallet.html', context={'money': counts})
-        else:
-            code = request.POST.get('code')
-            res = end_check(code, request.user.username)
-            if res:
-                return redirect('/success/success_payment')
+    try:
+        if request.user.username == user.username:
+            if request.method == 'GET':
+                counts = get_wallet(username)
+                return render(request, 'video_hosting/wallet.html', context={'money': counts})
             else:
-                return redirect('/error/code')
+                code = request.POST.get('code')
+                res = end_check(code, request.user.username)
+                if res:
+                    return redirect('/success/success_payment')
+                else:
+                    return redirect('/error/code')
 
-    else:
-        return redirect(f'/profile/{request.user.username}/wallet/')
+        else:
+            return redirect(f'/profile/{request.user.username}/wallet/')
+    except:
+        return redirect('/error/code1')
 
 
 def send_coins_page(request):
     if request.method == 'GET' and request.user.is_authenticated:
-        return render(request, 'video_hosting/sendmoney.html')
+        counts = get_wallet(request.user)
+        return render(request, 'video_hosting/sendmoney.html', context={'money': counts})
+    elif request.method == 'POST' and request.user.is_authenticated:
+        to_user = request.POST.get('to_name', None)
+        money = request.POST.get('count', None)
+        username = request.user.username
+        res = send_money(to_user, money, username)
+        if res:
+            send_notf(username, to_user, money)
+            return redirect('/success/success_send')
+
+        else:
+            return redirect('/error/error_send')
+
+    return redirect('/login')
+    
+def send_stars_page(request):
+    if request.method == 'GET' and request.user.is_authenticated:
+        counts = get_wallet(request.user)
+        return render(request, 'video_hosting/sendstar.html', context={'money': counts})
     elif request.method == 'POST' and request.user.is_authenticated:
         to_user = request.POST.get('to_name', None)
         email = request.POST.get('email', None)
@@ -147,6 +169,7 @@ def status_sending(request, status):
                           context={'title': 'Успешная оплата!', 'descr': 'Вы уже получили средства на свой счет :)!',
                                    'url': f'/profile/{request.user.username}/wallet'
                                    })
+        
     return redirect('/error/what')
 
 def error_wallet(request, status):
@@ -166,7 +189,11 @@ def error_wallet(request, status):
                           context={'descr': 'Ваш код оплаты был уже введен!',
                                    'url': f'/profile/{request.user.username}/wallet'
                                    })
-
+        elif status == 'code1':
+            return render(request, 'video_hosting/error.html',
+                          context={'descr': 'Неверный код!',
+                                   'url': f'/profile/{request.user.username}/wallet'
+                                   })
     return redirect(f'/profile/{request.user.username}/wallet')
 
 
@@ -296,6 +323,7 @@ class VideoCreateView(LoginRequiredMixin, CustomSuccessMessageMixin, CreateView)
     def form_valid(self,form):
         self.object = form.save(commit=False)
         self.object.author = self.request.user
+        Audio.objects.create(audio_path=self.object.audio)
         self.object.save()
         return super().form_valid(form)
     
@@ -309,14 +337,22 @@ class UpdateCreateView(LoginRequiredMixin, CustomSuccessMessageMixin, UpdateView
         kwargs['update'] = True
         return super().get_context_data(**kwargs)
         
-class DelDeleteView(LoginRequiredMixin, DeleteView):
-    model = Video
-    template_name = 'video_hosting/create.html'
-    success_url = reverse_lazy('create')
-    success_msg = 'Запись удалена'
-    def post(self, request, *args, **kwargs):
-        messages.success(self.request, self.success_msg)
-        return super().post(request)
+# class DelDeleteView(LoginRequiredMixin, DeleteView):
+#     model = Video
+#     template_name = 'video_hosting/create.html'
+#     success_url = reverse_lazy('create')
+#     success_msg = 'Запись удалена'
+#     def post(self, request, *args, **kwargs):
+#         messages.success(self.request, self.success_msg)
+#         return super().post(request)
+
+def delete_video_v(request, pk: int):
+    delete_video(pk)
+    return redirect('/create')
+
+def download_video_v(request, pk: int):
+    return download_video(pk)
+
 
 class MyprojectLoginView(LoginView):
     template_name = 'video_hosting/login.html'
@@ -329,18 +365,35 @@ class RegisterUserView(CreateView):
     model = User
     template_name = 'video_hosting/register.html'
     form_class = RegisterUserForm
-    success_url = reverse_lazy('create')
+    success_url = '/checks_phone' # !!!!!!!!!!!!!!!!!!!!!
     success_msg = 'Пользователь успешно создан'
     
     def form_valid(self, form):
         form_valid = super().form_valid(form)
         username = form.cleaned_data["username"]
         password = form.cleaned_data["password"]
+        phone = form.cleaned_data["phone"]
         aut_user = authenticate(username=username, password=password)
         login(self.request, aut_user)
         create_wallet(username)
+        send_code(username, phone)
         return form_valid
         
+@csrf_exempt
+def agree_phone(request):
+    if request.method == 'POST':
+        user = request.user
+        print(user)
+        code = request.POST.get('code', None)
+        phone = request.POST.get('phone', None)
+        if code:
+            return check_code_phone(user, code, request)
+        elif phone:
+            change_phone(user, phone)
+            return render(request, 'video_hosting/smsphone.html')
+
+    else:
+        return render(request, 'video_hosting/smsphone.html')
 
 class MyprojectLogoutView(LogoutView):
     next_page = reverse_lazy('home')

@@ -12,7 +12,8 @@ def inbox(request):
     messages = Message.get_message(user=request.user)
     active_direct = None
     directs = None
-    
+    context = {}
+
     if messages:
         message = messages[0]
         active_direct = message['user'].username
@@ -29,7 +30,7 @@ def inbox(request):
             'messages': messages,
         }
             
-        return render(request, 'directs/inbox.html', context)      
+    return render(request, 'directs/inbox.html', context)
    
 def Directs(request, username):
     user = request.user
@@ -57,9 +58,19 @@ def SendMessage(request):
     body = request.POST.get('body')
     
     if request.method == "POST":
-        to_user = User.objects.get(username=to_user_username)
-        Message.send_message(from_user, to_user, body)
-        return redirect('message')
+        if body == '':
+            return redirect('message')
+        elif from_user == to_user_username:
+            
+            return redirect('message')
+        else:
+            
+            to_user = User.objects.get(username=to_user_username)
+            if to_user == from_user:
+                
+                return redirect('message')
+            Message.send_message(from_user, to_user, body)
+            return redirect('message')
     else:
         pass
         

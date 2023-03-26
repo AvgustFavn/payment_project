@@ -5,7 +5,7 @@ import requests
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.types.message import ContentType
 
-from video_hosting import config
+import config
 
 # log
 logging.basicConfig(level=logging.INFO)
@@ -15,7 +15,7 @@ bot = Bot(token=config.TOKEN)
 dp = Dispatcher(bot)
 
 # prices
-PRICE = types.LabeledPrice(label="2 виртуальных монет", amount=100*100)  # в копейках (руб)
+PRICE = types.LabeledPrice(label="2 виртуальных монет", amount=100 * 100)  # в копейках (руб)
 PRICE_1 = types.LabeledPrice(label="4 виртуальных монет", amount=200 * 100)  # в копейках (руб)
 PRICE_2 = types.LabeledPrice(label="10 виртуальных монет", amount=500 * 100)  # в копейках (руб)
 
@@ -77,7 +77,7 @@ async def successful_payment(message: types.Message):
     d = list(payment_info.items())
     money = (int(d[1][1]) / 100) / 50
     check = d[-1][1]
-    response = requests.post(f'http://0.0.0.0:8080/checks_path/', data={'money': money, 'check': check})  # !!!Смените потом на свой адрес сайта
+    response = requests.post(f'http://127.0.0.1:8000/checks_path/', data={'money': money, 'check': check})  # !!!Смените потом на свой адрес сайта
     await bot.send_message(message.chat.id,
                            f"Платеж прошел, введи код на сайте для получения средств! Код: {check}")
 

@@ -15,6 +15,7 @@ defusedxml==0.7.1
 Deprecated==1.2.13
 distro==1.8.0
 Django==4.1.7
+django-cleanup==7.0.0
 django-templated-mail==1.1.1
 djangorestframework==3.14.0
 djangorestframework-simplejwt==4.8.0

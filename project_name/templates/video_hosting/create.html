@@ -40,6 +40,7 @@
       <th scope="col">Дата создания</th>
       <th scope="col">Подпись</th>
       <th scope="col">Редактирование</th>
+        <th scope="col">Скачать</th>
       <th scope="col">Удаление</th>
     </tr>
   </thead>
@@ -51,6 +52,7 @@
       <td>{{i.create_at|date:'d.m.Y'}}</td>
       <td>{{i.description|truncatechars:15 }}</td>
       <td><a href="{% url 'update' i.id %}">редактировать</a></td>
+      <td><a href="/download/{{i.id}}/" download>Скачать</a></td>
       <td>
           
     

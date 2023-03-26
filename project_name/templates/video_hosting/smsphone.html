@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:image:src" content="">
+    <meta property="og:image" content="">
+    <meta name="twitter:title" content="Page 5">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link rel="shortcut icon" href="assets/images/logo5.png" type="image/x-icon">
+    <meta name="description" content="">
+
+
+    <title>Подтверждение телефона</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css">
+    <link rel="stylesheet" href="assets/popup-overlay-plugin/style.css">
+    <link rel="stylesheet" href="assets/theme/css/style.css">
+    <link rel="preload"
+          href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"
+          as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap">
+    </noscript>
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" as="style"
+          onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap">
+    </noscript>
+    <link rel="preload"
+          href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"
+          as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap">
+    </noscript>
+    <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css">
+    <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
+
+
+</head>
+<body>
+
+<section data-bs-version="5.1" class="form4 cid-tzw1ykW7G2" id="form4-b">
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-4 col-md-4">
+                <h2 class="mbr-section-title mbr-fonts-style display-5"><strong>Подтвердите свой номер, сейчас придет
+                    смс по указанному номеру</strong></h2>
+            </div>
+            <div class="col-12 col-lg-8 col-md-8 item-form">
+                <div class="mx-auto mbr-form">
+                    <form action="/checks_phone/" method="POST" class="mbr-form form-with-styler"
+                          data-verified="">
+                        <div class="row">
+
+                            <div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12"> Oops...!
+                                some problem!
+                            </div>
+                        </div>
+                        <div class="dragArea row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 form-group" data-for="text">
+                                <input required type="text" name="code" placeholder="Код" data-form-field="text"
+                                       class="form-control display-7" value="" id="text-form4-b">
+                            </div>
+                            <div class="col-lg-8 col-md-12 col-sm-12 form-group">
+                                <div class="form-control-label">
+                                </div>
+
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-secondary display-4">Подтвердить</button>
+                            </div>
+                        </div>
+                    </form><!--Formbuilder Form-->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% if bad %}
+<section data-bs-version="5.1" class="content6 cid-tzw28a5OOW" id="content6-c">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-7">
+                <hr class="line">
+                <p class="mbr-text align-center mbr-fonts-style my-4 display-5"><em>Вы указали не правильный код :(</em>
+                </p>
+                <hr class="line">
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section data-bs-version="5.1" class="form1 cid-tzw4mANDxq" id="aform1-e">
+
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 mbr-form">
+                <form action="/checks_phone/" method="POST" class="mbr-form form-with-styler" data-verified="">
+                    <div class="row">
+
+                        <div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">
+                            Oops...! some problem!
+                        </div>
+                    </div>
+                    <div class="dragArea row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <h1 class="mbr-section-title align-center mbr-fonts-style display-5"><strong>Сменить
+                                номер</strong></h1>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+
+                        </div>
+                        <div class="form-container col-12">
+                            <div class="form-group" data-for="email">
+                                <input required type="text" name="phone" placeholder="79999999999" data-form-field="email"
+                                       class="form-control" id="email-aform1-e">
+                            </div>
+                            <div class="mbr-section-btn">
+                                <button type="submit" class="btn btn-secondary display-7">Сменить</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<section><a href="https://mobiri.se"></a><a href="https://mobiri.se"></a></section>
+<script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="assets/smoothscroll/smooth-scroll.js"></script>
+<script src="assets/ytplayer/index.js"></script>
+<script src="assets/theme/js/script.js"></script>
+
+
+</body>
+</html>
