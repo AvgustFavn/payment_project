@@ -319,7 +319,8 @@ class VideoCreateView(LoginRequiredMixin, CustomSuccessMessageMixin, CreateView)
     def get_context_data(self, **kwargs):
         kwargs['list_video'] = Video.objects.all().order_by('-id')
         return super().get_context_data(**kwargs)
-        
+
+    @audio_dec
     def form_valid(self,form):
         self.object = form.save(commit=False)
         self.object.author = self.request.user

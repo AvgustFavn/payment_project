@@ -6,10 +6,12 @@ from django.http import FileResponse
 from django.shortcuts import redirect, render
 
 from directs.models import Message
+from project_name.settings import BASE_DIR
 from video_hosting.models import *
 from django.db.models import Q
 from django.contrib.auth.backends import ModelBackend
 from video_hosting import notisend
+from moviepy.editor import *
 
 project = 'test_name'  # Имя проекта
 api_key = 'db1716d1afe906ae2dee1e4365b2dcc3'  # API-ключ
@@ -96,9 +98,8 @@ def end_check(code, username):
         return False
 
 def delete_video(id):
-    path = '/home/avgust/Документы/project_name/media/' # замените на свой путь!
     v = Video.objects.get(id=id)
-    os.remove(f'{path}{str(v.file)}')
+    os.remove(f'{BASE_DIR}/media/{str(v.file)}')
     with connection.cursor() as cursor:
         cursor.execute(f'DELETE FROM video_hosting_video WHERE id = {id};')
 
@@ -141,3 +142,37 @@ def change_phone(username, phone):
     u.phone = f'7{phone[1:]}'
     u.save()
     send_code(username, phone)
+
+def add_music(audio_path, video_path):
+    video_clip = VideoFileClip(f'{BASE_DIR}/media/{video_path}')
+    audio_clip = AudioFileClip(f'{BASE_DIR}/media/{audio_path}')
+    audio_clip = audio_clip.volumex(0.03)
+    end = video_clip.end
+    audio_clip = audio_clip.subclip(0, end)
+    if video_clip.audio: # Если есть аудио в видео
+        audio_clip = CompositeAudioClip([video_clip.audio, audio_clip])
+
+    final_clip = video_clip.set_audio(audio_clip)
+    new_name = str(video_path).split('video/')
+    old_name = new_name[1]
+    new_name = old_name.split('.')
+    new_name = f'_{new_name[0]}.{new_name[1]}'
+    final_clip.write_videofile(f'{BASE_DIR}/media/video/{new_name}', logger=None, threads=20)
+    change_video(old_name)
+
+
+def change_video(old_name):
+    video_obj = Video.objects.get(file=f'video/{old_name}')
+    video_obj.file = f'video/_{old_name}'
+    os.remove(f'{BASE_DIR}/media/video/{old_name}')
+    video_obj.save()
+
+
+def audio_dec(function_to_decorate):
+    def wrap(self, form):
+        resp = function_to_decorate(self, form)
+        if self.object.audio:
+            add_music(self.object.audio, self.object.file)
+        return resp
+
+    return wrap

@@ -56,7 +56,7 @@ class Video(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='authors')
     
     description = models.TextField(verbose_name = 'Добавить подпись',)
-    image = models.ImageField(verbose_name = 'Обложка',upload_to='image/')
+    image = models.ImageField(verbose_name = 'Обложка',upload_to='image/', blank=True)
     file = models.FileField(verbose_name = 'Видео',
         upload_to='video/',
         validators=[FileExtensionValidator(allowed_extensions=['mp4'])]
@@ -65,7 +65,8 @@ class Video(models.Model):
         upload_to='audio/',
         validators=[FileExtensionValidator(allowed_extensions=['mp3'])],
         null=True,
-        default=None
+        default=None,
+        blank=True
     )
     create_at = models.DateTimeField(auto_now_add=True)
     
