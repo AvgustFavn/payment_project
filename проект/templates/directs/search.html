@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<br><br>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://kit.fontawesome.com/fc1e235b2e.js"></script>
+  <title>Dance Video</title>
+</head>
+
+<body>
+
+  <div id="wrapper">
+    <div class="container">
+      <div class="phone-app-ddemo"></div>
+      <div class="form-data">
+        
+        <form action="" method="GET">
+            <div class="headedr__search">
+                <input type="text" placeholder="Поиск" name="q" value="{{ request.GET.q }}">
+                <button class="btn btn-primary" type="submit">Искать</button>
+                
+            </div>
+        </form>
+
+        <form action="" method="POST" enctype="multipart/form-data">
+          <div class="logo">
+            <h3 style="padding-top: 5px; font-size: 20px;">Результат</h3>
+          </div>
+
+        {% for user in users %}
+            <div class="side-menu__user-profile" style="text-align: start; border: solid rgba(192, 192, 192, 0.514) 1px; padding: 10px; border-radius: 25px;">
+                <a href="{% url 'profile' user.username %}" class="side-menu__user-avatar">
+				
+                    
+					{% if user.avatar %}
+					<p style="text-align: left;"><img class='rounded-circle mr-1' src="{{user.avatar.url}}" width="50" height="50"></p>
+					<strong>{{user.username}}</strong><br>
+                    <a href="{% url 'profile' user.username %}" style="color: blue;" class="side-menu__user-button">Смотреть профиль</a>
+					
+					
+					{% else %}
+					<p style="text-align: left;"><img src="../../media/image/user.png" class="rounded-circle mr-1" alt="img" width="50" height="50"></p>
+					<strong>{{user.username}}</strong><br>
+                    <a href="{% url 'profile' user.username %}" style="color: blue;" class="side-menu__user-button">Смотреть профиль</a>
+                 {% endif %}
+            <!-- <hr> -->
+        {% endfor %}
+       
+          
+        </form>
+        
+      </div>
+    </div>
+
+
+
+  </div>
+
+</body>
+
+</html>
+{% endblock content %}

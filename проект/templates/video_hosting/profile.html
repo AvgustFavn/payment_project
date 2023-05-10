@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+{% if user.username != request.user.id %}
+<style>
+.textcols {
+	white-space: nowrap;
+	font-size: 0;
+}
+.textcols-item {
+	white-space: normal;	
+	display: inline-block;
+	width: 30%;
+	vertical-align: top;
+	background: white;
+	margin-right: 5%;
+	font-size: 14px;
+}
+
+.textcols-item1 {
+	white-space: normal;	
+	display: inline-block;
+	width: 30%;
+	vertical-align: top;
+	background: white;
+	margin-right: 50%;
+	font-size: 14px;
+}
+.textcols .textcols-item:last-child {
+	margin-right: 0 ;
+}
+
+# {{profile.avatar.url}}
+# ../../media/image/user.png
+# style="width: 200px; height: 200px;
+
+
+
+
+</style>
+<div class="container">
+
+    <div class="card-body">
+        {% if user.avatar %}
+        <p style="text-align: center;"><img class='rounded-circle' src="{{user.avatar.url}}" height=100 width=100></p>
+        <br>
+        {% else %}
+        <p style="text-align: center;"><img class='rounded-circle' src="../../media/image/user.png" height=100
+                                            width=100></p><br>
+
+        {% endif %}
+        <p style="text-align: center;"><strong style="text-align: center;">{{ user.username }}</strong></p>
+        <div class="container">
+            {% if request.user.is_authenticated and request.user.username == user.username %}
+
+            <section data-bs-version="5.1" class="content11 cid-tyvkfx7XtB" id="content11-4">
+
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-12 col-lg-10">
+                            <div class="mbr-section-btn align-center" style="text-align: center;">
+                                <a class="btn btn-primary display-4" href="{% url 'edit_profile' user.id %}">Редактировать</a><br><br>
+                                <a class="btn btn-primary display-4" href="/profile/{{user.username}}/wallet">Кошелек</a></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {% else %}
+        </div>
+        {% endif %}
+
+
+        {% if request.user.is_authenticated and request.user.username != user.username %}
+        {% if follow_status == True %}
+        <p style="text-align: center;"><a href="{% url 'follow' user.username 0 %}" class="btn profile-edit-btn"
+                                          style="color: red;">Отписаться</a></p>
+
+
+        {% else %}
+
+        <p style="text-align: center;"><a href="{% url 'follow' user.username 1 %}" class="btn profile-edit-btn"
+                                          style="color: green;">Подписаться</a></p>
+
+
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+</div>
+</div>
+
+<div class="textcols">
+    <div class="textcols-item">
+        <p style="text-align: center;"><b>{{post_count}}</b></p>
+        <p style="text-align: center;"><b>Видео</b></p>
+    </div>
+    <div class="textcols-item">
+
+        <p style="text-align: center;"><b>{{followers_count}}</b></p>
+        <p style="text-align: center;"><b>Подписчики</b></p>
+    </div>
+    <div class="textcols-item">
+        <p style="text-align: center;"><b>{{following_count}}</b></p>
+        <p style="text-align: center;"><b>Подписки</b></p>
+
+    </div>
+</div>
+</div>
+
+
+<div class="container">
+
+    <div class="gallery">
+
+        {% for video in video_list.all %}
+
+
+        <a href="{% url 'videomain' video.id %}">
+            <div class="gallery-item" tabindex="0">
+
+                <img src="{{ video.image.url }}" class="gallery-image" alt=""
+                     style="width: 400px; height: 500px; object-fit: cover;">
+
+                <div class="gallery-item-info">
+
+                    <ul>
+                        <span class="visually-hidden">Likes:</span><i class="fas fa-heart" aria-hidden="true"></i>
+                        {{post.likes}}</li>
+                        <span class="visually-hidden">Comments:</span><i class="fas fa-comment" aria-hidden="true"></i>
+                        {{post.comment.count}}
+                    </ul>
+
+                </div>
+
+
+            </div>
+            {% endfor %}
+
+
+            {% endif %}
+            {% endblock content %}

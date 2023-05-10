@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+    {% block content %}
+   <h1>Админ панель</h1>
+   
+<!-- Button trigger modal -->
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+  Изменить музыку
+</button>
+
+<a href="{% url 'create' %}">Добавить контент</a>
+
+{% if success %}
+<p>Добавлена</p>
+{% endif %}
+
+{% if messages %}
+
+<div class="alert alert-success">
+    {% for m in messages %}
+    {{m}} 
+    {% endfor %}
+    
+</div>
+{% endif %}
+
+{% if update %}
+<p class="mt-4">Страница редактирования</p>
+{% if success_update %}
+<p>Обновлено</p>
+{% endif %}
+            <form id="add_update" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form}}
+            </form>
+            
+            <button form="add_update" type="submit" class="btn btn-primary">обновить</button>
+{% else %}
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Дата создания</th>
+        <th scope="col">Скачать</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider-mt-10">
+      {% for i in list_videocreate %}
+	  {% if i.authors == request.user %}
+      <tr {% if i.id == request.GET.id|add:'0' %}style="background:yellow"{% endif %}>
+      <td>{{i.create_at|date:'d.m.Y'}}</td>
+      <td><a href="{% url 'downloadvideo' i.id %}"download>Скачать</a></td>
+      <td>
+          
+    
+     
+
+          </td>
+    </tr>
+   {% endif %}
+    {% endfor %}
+    
+
+  
+  </tbody>
+</table>
+
+{% endif %}
+<!-- Modal </form>
+<a href="javascript:void()" onclick="delete_question()">удалить</a>
+<script>
+    function delete_question() {
+        if (confirm("Вы уверены")) {
+            document.getElementById('delete_form').submit()
+        }
+    }-->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="add_form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form}}
+            </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">закрыть</button>
+        <button form="add_form" type="submit" class="btn btn-primary">добавить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="add_form1" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form}}
+            </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">закрыть</button>
+        <button form="add_form" type="submit" class="btn btn-primary">добавить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  {% endblock %}  
+

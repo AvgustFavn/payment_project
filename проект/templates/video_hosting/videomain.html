@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="main-posts">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-sm-6">
+            <h4><a href="/">Вернуться назад</a></h4>
+          <span class="date">{{ video.create_at }}</span>
+          <p>{{ video.description }}</p>
+		  <p>{{ video.total_views }} Просмотров </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-12">
+          <video width="90%" height="auto"
+              id="my-video"
+              class="video-js"
+              controls
+              preload="auto"
+              
+              controls 
+              data-setup="{}"
+          >
+            <source src="{% url 'stream' video.id %}" type="video/mp4"/>
+            <source src="{% url 'stream' video.id %}" type="video/webm"/>
+          </video>
+          <br>
+          
+          
+          
+           
+         <div class="col d-flex flex-row justify-content-around">
+             {% if request.user.is_authenticated %}
+			
+            <form method="post" action="{% url 'like' video.pk %}">
+              {% csrf_token %}
+                  <input type="hidden" name="text" value="{{ request.path }}">
+                  <button style="background: transparent; border: none; box-shadow: none;" type="submit">
+                      <img id='star' class='rounded-circle' src="../../media/star1.png" height=30 width=30>
+                       
+                      <span>{{ video.likes.all.count }}</span>
+                  </button>
+				   
+         </form>
+		 
+		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+  ПОДДЕРЖАТЬ АВТОРА
+</button>
+
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        УКАЖИТЕ НИКНЕЙМ ПОЛУЧАТЕЛЯ в поле КОММЕНТАРИЙ<br>
+		Для быстрого зачисления на счет: <br>
+		Отправьте никнейм кому начислять, сумму и время платежа<br> на почту:
+							<a href="mailto:a9055555@yandex.ru">a9055555@yandex.ru</a>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">закрыть</button>
+		<a href="https://pay.cloudtips.ru/p/f938208b" class="btn btn-primary">Пополнение</a>
+      </div>
+    </div>
+  </div>
+</div>
+	</div>	
+	</form>
+		
+	
+		 <p><strong><a href="{% url 'profile' video.author.username %}">{{video.author}}</a></strong> </p></div>
+		 
+         {% endif %}
+		 
+		 
+		<br>
+{% if request.user.is_authenticated and request.user == profile.user %}
+             {% endif %}
+			  <div class="container">
+            <div id="welcome" class="panel" >
+  <button class="button" id="okButton">Комментарии ({{video.comments_video.all.count}})</button>
+</div>
+          
+              <div id="awesome" class="panel" hidden>
+  <button class="button" id="okButton">Комментарии ({{video.comments_video.all.count}})</button>
+
+</div>
+       
+              
+  <div class="row">
+      
+<ul>
+{% for item in video.comments_video.all %}
+<br> 
+{{item.author}}
+<br>  
+{{item.text}}
+
+
+{% endfor %}
+</ul>
+</div>
+</div>
+</div>
+
+ 
+
+          <hr>
+          {% if request.user.is_authenticated %}
+          <p>Добавить комментарий</p>
+          
+          
+          {% if messages %}
+
+<div class="alert alert-success">
+    {% for m in messages %}
+    {{m}} 
+    {% endfor %}
+    
+</div>
+{% endif %}
+
+          <div class='col-4'>
+              
+        <form action="" id="add_form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_p}}
+            </form>
+  
+
+       
+        <button form="add_form" type="submit" class="btn btn-primary">Добавить</button>
+
+           {% endif %}
+          
+            </div>
+        </div>
+</div>
+</div>
+
+
+
+
+
+  <script>document.getElementById("okButton")
+        .addEventListener("click", function() {
+  document.getElementById("welcome").hidden = true;
+  document.getElementById("awesome").hidden = false;
+}, false);</script>
+
+
+<script>function like()
+{
+    var like = $(this);
+    var type = like.data('type');
+    var pk = like.data('id');
+    var action = like.data('action');
+    var dislike = like.next();
+ 
+    $.ajax({
+        url : "/api/" + type +"/" + pk + "/" + action + "/",
+        type : 'POST',
+        data : { 'obj' : pk },
+ 
+        success : function (json) {
+            like.find("[data-count='like']").text(json.like_count);
+            dislike.find("[data-count='dislike']").text(json.dislike_count);
+        }
+    });
+ 
+    return false;
+}
+ </script>
+
+<script>function dislike()
+{
+    var dislike = $(this);
+    var type = dislike.data('type');
+    var pk = dislike.data('id');
+    var action = dislike.data('action');
+    var like = dislike.prev();
+ 
+    $.ajax({
+        url : "/api/" + type +"/" + pk + "/" + action + "/",
+        type : 'POST',
+        data : { 'obj' : pk },
+ 
+        success : function (json) {
+            dislike.find("[data-count='dislike']").text(json.dislike_count);
+            like.find("[data-count='like']").text(json.like_count);
+        }
+    });
+ 
+    return false;
+}</script>
+ 
+ 
+<script>// Подключение обработчиков
+$(function() {
+    $('[data-action="like"]').click(like);
+    $('[data-action="dislike"]').click(dislike);
+});</script>
+
+
+
+{% endblock content %}
